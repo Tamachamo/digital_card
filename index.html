@@ -67,12 +67,12 @@
                 setFormData(data.data);
                 setView('card');
               } else {
-                setErrorMsg('カードが見つからんかったわわ…。');
+                setErrorMsg('カードが見つかりません');
                 setView('error');
               }
             })
             .catch(err => {
-              setErrorMsg('通信エラーが発生したに！');
+              setErrorMsg('通信エラー');
               setView('error');
             });
         }
@@ -105,19 +105,19 @@
             setShareUrl(newUrl);
             setView('preview');
           } else {
-            alert('保存に失敗したに！');
+            alert('保存に失敗しました');
             setView('form');
           }
         })
         .catch(err => {
-          alert('通信エラーやわ！GASのURLは合っとるか確認してな！');
+          alert('通信エラー');
           setView('form');
         });
       };
 
       const copyToClipboard = () => {
         navigator.clipboard.writeText(shareUrl);
-        alert('短いリンクをコピーしたに！ LINE等で送ったってな！');
+        alert('リンクをコピーしました！ 送りたい相手に送信してください！');
       };
 
       if (view === 'loading') {
@@ -125,7 +125,7 @@
           <div className="min-h-screen flex items-center justify-center bg-gray-50">
             <div className="text-center">
               <i className="fa-solid fa-spinner fa-spin text-4xl text-indigo-500 mb-4"></i>
-              <p className="text-gray-600 font-bold animate-pulse">サーバーと通信中やに…💤</p>
+              <p className="text-gray-600 font-bold animate-pulse">通信中…</p>
             </div>
           </div>
         );
@@ -172,7 +172,7 @@
                   </select>
                 </div>
                 <button type="submit" className="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 transition-colors shadow-md mt-4">
-                  短いURLでカードを生成する
+                  カードを生成する
                 </button>
               </form>
 
@@ -185,7 +185,7 @@
                       <i className="fa-solid fa-eye mr-2"></i>自分でプレビューを見る
                     </a>
                     <button onClick={copyToClipboard} className="w-full bg-gray-800 text-white font-bold py-2.5 rounded-xl hover:bg-gray-700 transition-colors shadow-sm">
-                      <i className="fa-solid fa-link mr-2"></i>短いリンクをコピー
+                      <i className="fa-solid fa-link mr-2"></i>リンクをコピー
                     </button>
                   </div>
                 </div>

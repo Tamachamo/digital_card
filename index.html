@@ -44,8 +44,6 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // 🚨🚨🚨 重要：ここを書き換える！ 🚨🚨🚨
-    // URLの前後の 「 ' 」（シングルクォーテーション）は絶対に消さないでな！
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbytIKnQYCHXeWg_97NBASFbEfosJzmvHoyVief2qeDwG1df75mPtyNUawQf8C8voOE/exec';
 
     const App = () => {
@@ -197,7 +195,7 @@
 
       const themeConfig = {
         hearts: { bg: 'bg-pink-100', icon: 'fa-heart text-pink-400', animation: 'animate-float' },
-        stars: { bg: 'bg-indigo-900 text-white', icon: 'fa-star text-yellow-300', animation: 'animate-fall' }
+        stars: { bg: 'bg-indigo-900', icon: 'fa-star text-yellow-300', animation: 'animate-fall' } // ⭐ starsのテキストカラーをデフォルト（白以外）に戻したに！
       };
       const currentTheme = themeConfig[formData.theme] || themeConfig.hearts;
       const particles = Array.from({ length: 20 });

@@ -32,8 +32,8 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // 🚨 GASのURLはそのままやに！
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbytIKnQYCHXeWg_97NBASFbEfosJzmvHoyVief2qeDwG1df75mPtyNUawQf8C8voOE/exec';
+    // 🚨 新しいGASのURLに書き換えたに！
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbza1jomxSF6eFKhokzYXH3pw7sC15qre4235Gp43J6RbxnnHp6VRSpfqh4iUQ4vahVS/exec';
 
     const App = () => {
       const [view, setView] = useState('loading'); 
@@ -84,7 +84,7 @@
         );
       }
 
-      // 🎁 テーマ設定（一気に豪華にしたに！）
+      // 🎁 テーマ設定
       const themeConfig = {
         wedding: { bg: 'bg-gradient-to-br from-amber-50 to-orange-50', icon: 'fa-sparkles text-amber-200', animation: 'animate-sway', cardStyle: 'border-2 border-amber-200/50 shadow-amber-100' },
         birthday: { bg: 'bg-gradient-to-br from-yellow-100 via-pink-100 to-cyan-100', icon: 'fa-certificate text-pink-300', animation: 'animate-fall', cardStyle: 'border-2 border-white shadow-xl' },
@@ -123,7 +123,7 @@
               </p>
             )}
 
-            {/* ココナラ営業用ボタン（依頼者が見た時に宣伝になる） */}
+            {/* ココナラ営業用ボタン */}
             <div className="mt-12 text-center pt-6 border-t border-gray-200/20">
               <a href="https://coconala.com/" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-gray-400 hover:text-gray-600 transition-colors inline-block px-4 py-2">
                 <i className="fa-solid fa-envelope-open-text mr-1.5"></i>オリジナルWEB招待状・カードの制作依頼はこちら

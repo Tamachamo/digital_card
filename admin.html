@@ -17,7 +17,7 @@
   <script type="text/babel">
     const { useState } = React;
 
-    // 🚨 新しいGASのURLに書き換えたに！
+    // 🚨 最新のGAS URLやに！
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbza1jomxSF6eFKhokzYXH3pw7sC15qre4235Gp43J6RbxnnHp6VRSpfqh4iUQ4vahVS/exec';
 
     const App = () => {
@@ -45,8 +45,11 @@
         .then(data => {
           setIsLoading(false);
           if (data.success) {
-            const newUrl = `${window.location.origin}${window.location.pathname.replace('admin.html', '')}?id=${data.id}`;
+            // 👇 【修正ポイント】URLに「admin」が絶対に入らない最強の仕組み！
+            const baseUrl = window.location.href.split('admin')[0];
+            const newUrl = `${baseUrl}?id=${data.id}`;
             setShareUrl(newUrl);
+            
             // 発行成功したらパスワード欄だけ空に戻しとく
             setFormData({ ...formData, secret: '' });
           } else {

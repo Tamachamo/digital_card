@@ -19,10 +19,21 @@
     @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
     @keyframes sway { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(20px); } }
 
+    /* ✨ 結婚式用のキラキラ＆舞い上がる羽エフェクト */
+    @keyframes sparkFeather {
+      0% { transform: translateY(100vh) translateX(0px) scale(0.5) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; filter: drop-shadow(0 0 5px rgba(255,215,0,0.8)); }
+      50% { transform: translateY(50vh) translateX(30px) scale(1) rotate(180deg); opacity: 0.9; }
+      90% { opacity: 0.8; filter: drop-shadow(0 0 2px rgba(255,215,0,0.5)); }
+      100% { transform: translateY(-10vh) translateX(-20px) scale(1.3) rotate(360deg); opacity: 0; }
+    }
+
     .animate-float { animation: floatUp linear infinite; position: absolute; bottom: -10%; }
     .animate-fall { animation: fallDown linear infinite; position: absolute; top: -10%; }
-    .animate-sway { animation: floatUp linear infinite, sway 3s ease-in-out infinite; position: absolute; bottom: -10%; }
     .animate-pop-in { animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    
+    /* ✨ 新しい結婚式用アニメーション */
+    .animate-wedding { animation: sparkFeather linear infinite; position: absolute; bottom: -10%; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -32,7 +43,7 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // 🚨 新しいGASのURLに書き換えたに！
+    // 🚨 GAS URLはそのままやに！
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbza1jomxSF6eFKhokzYXH3pw7sC15qre4235Gp43J6RbxnnHp6VRSpfqh4iUQ4vahVS/exec';
 
     const App = () => {
@@ -56,7 +67,7 @@
             })
             .catch(() => setView('notfound'));
         } else {
-          // IDがない場合はフォームを見せずにエラー画面にする鉄壁の防御！
+          // IDがない場合は防御！
           setView('notfound');
         }
       }, []);
@@ -66,7 +77,7 @@
           <div className="min-h-screen flex items-center justify-center bg-gray-50">
             <div className="text-center text-gray-400">
               <i className="fa-solid fa-envelope-open-text fa-bounce text-4xl mb-4"></i>
-              <p className="font-bold">カードを開いています…</p>
+              <p className="font-bold">特別な招待状を開いています…</p>
             </div>
           </div>
         );
@@ -77,16 +88,23 @@
           <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
             <div className="text-center bg-white p-8 rounded-3xl shadow-sm border border-gray-100 max-w-sm">
               <i className="fa-solid fa-gift text-4xl text-gray-300 mb-4"></i>
-              <h2 className="text-lg font-bold text-gray-700 mb-2">特別なカードのお届けです</h2>
-              <p className="text-sm text-gray-500">正しいURLからアクセスして、<br/>メッセージをお受け取りください。</p>
+              <h2 className="text-lg font-bold text-gray-700 mb-2">特別なWEB招待状です</h2>
+              <p className="text-sm text-gray-500">正しいURLからアクセスして、<br/>新郎新婦からのメッセージをお受け取りください。</p>
             </div>
           </div>
         );
       }
 
-      // 🎁 テーマ設定
+      // 🎁 テーマ設定（ここをパキっと華やかにしたに！）
       const themeConfig = {
-        wedding: { bg: 'bg-gradient-to-br from-amber-50 to-orange-50', icon: 'fa-sparkles text-amber-200', animation: 'animate-sway', cardStyle: 'border-2 border-amber-200/50 shadow-amber-100' },
+        // ✨ 新：Wedding（パキっと華やか版）
+        // 背景を鮮やかなピンク〜オレンジのグラデーションに、羽エフェクト、ゴールドの煌めき
+        wedding: { 
+          bg: 'bg-gradient-to-br from-pink-400 via-orange-300 to-amber-200', 
+          icon: 'fa-feather-pointed text-amber-100', // fa-feather-pointedを煌めく羽に
+          animation: 'animate-wedding', 
+          cardStyle: 'border-4 border-white shadow-2xl shadow-orange-200/50' 
+        },
         birthday: { bg: 'bg-gradient-to-br from-yellow-100 via-pink-100 to-cyan-100', icon: 'fa-certificate text-pink-300', animation: 'animate-fall', cardStyle: 'border-2 border-white shadow-xl' },
         elegant: { bg: 'bg-slate-900', icon: 'fa-snowflake text-slate-400', animation: 'animate-fall', cardStyle: 'bg-slate-800/80 border border-slate-700 text-slate-200', textColor: 'text-slate-200', subTextColor: 'text-slate-400' },
         hearts: { bg: 'bg-pink-100', icon: 'fa-heart text-pink-400', animation: 'animate-float', cardStyle: '' },
@@ -94,27 +112,27 @@
       };
 
       const currentTheme = themeConfig[cardData.theme] || themeConfig.wedding;
-      const particles = Array.from({ length: 25 });
+      const particles = Array.from({ length: 30 }); // エフェクトを少し増やしたに！
 
       return (
         <div className={`min-h-screen relative overflow-hidden flex items-center justify-center p-4 transition-colors duration-1000 ${currentTheme.bg}`}>
           {/* 背景エフェクト */}
           {particles.map((_, i) => {
-            const size = Math.random() * 1.5 + 0.5; 
+            const size = Math.random() * 1.5 + 0.8; // 少し大きく
             const left = Math.random() * 100; 
-            const delay = Math.random() * 5; 
-            const duration = Math.random() * 6 + 6; 
+            const delay = Math.random() * 8; // バラつきを持たせる
+            const duration = Math.random() * 6 + 7; // 少しゆっくり舞う
             return (
-              <i key={i} className={`fa-solid ${currentTheme.icon} ${currentTheme.animation}`} style={{ fontSize: `${size}rem`, left: `${left}%`, animationDelay: `${delay}s`, animationDuration: `${duration}s`, opacity: Math.random() * 0.6 + 0.2 }}></i>
+              <i key={i} className={`fa-solid ${currentTheme.icon} ${currentTheme.animation}`} style={{ fontSize: `${size}rem`, left: `${left}%`, animationDelay: `${delay}s`, animationDuration: `${duration}s`, opacity: Math.random() * 0.7 + 0.3 }}></i>
             );
           })}
 
           {/* カード本体 */}
-          <div className={`relative z-10 bg-white/90 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-2xl max-w-lg w-full animate-pop-in ${currentTheme.cardStyle}`}>
-            <h2 className={`text-2xl md:text-3xl font-bold mb-6 border-b-2 border-gray-100/20 pb-4 ${currentTheme.textColor || 'text-gray-800'}`}>
+          <div className={`relative z-10 bg-white/95 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-2xl max-w-lg w-full animate-pop-in ${currentTheme.cardStyle}`}>
+            <h2 className={`text-2xl md:text-3xl font-extrabold mb-6 border-b-2 border-gray-100/20 pb-4 ${currentTheme.textColor || 'text-gray-800'}`}>
               {cardData.to} へ
             </h2>
-            <p className={`text-lg md:text-xl leading-relaxed whitespace-pre-wrap font-medium min-h-[100px] ${currentTheme.textColor ? 'text-slate-300' : 'text-gray-600'}`}>
+            <p className={`text-lg md:text-xl leading-relaxed whitespace-pre-wrap font-semibold min-h-[100px] ${currentTheme.textColor ? 'text-slate-300' : 'text-gray-600'}`}>
               {cardData.message}
             </p>
             {cardData.from && (
@@ -125,7 +143,7 @@
 
             {/* ココナラ営業用ボタン */}
             <div className="mt-12 text-center pt-6 border-t border-gray-200/20">
-              <a href="https://coconala.com/" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-gray-400 hover:text-gray-600 transition-colors inline-block px-4 py-2">
+              <a href="https://coconala.com/" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-gray-400 hover:text-gray-600 transition-colors inline-block px-4 py-2 hover:bg-white/50 rounded-full">
                 <i className="fa-solid fa-envelope-open-text mr-1.5"></i>オリジナルWEB招待状・カードの制作依頼はこちら
               </a>
             </div>

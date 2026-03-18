@@ -14,23 +14,24 @@
   <style>
     body { margin: 0; font-family: 'Noto Serif JP', serif; background-color: #fdfbf9; overflow-x: hidden; }
     
-    .hero-bg-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0; overflow: hidden; background-color: #e5e7eb; }
-    
-    /* 👇 【修正ポイント】全背景共通！スマホで切れない最強設定に戻したに！ */
+    /* どんな画像でも絶対に隙間を作らない最強設定！ */
+    .hero-bg-wrap { 
+      position: fixed; top: 0; left: 0; width: 100%; 
+      height: 110vw; /* スマホでの背景エリアの高さを固定！ */
+      z-index: 0; overflow: hidden; background-color: #fdfbf9; 
+    }
     .hero-bg {
       width: 100%; height: 100%;
-      background-size: 100% auto; /* 🚨スマホの横幅に完璧に合わせる！ */
-      background-position: top center;
+      background-size: cover; /* 必ず隙間なく枠を埋め尽くす */
+      background-position: center center; /* 中央を綺麗に見せる */
       background-repeat: no-repeat;
-      /* ✨ 深い呼吸エフェクト（Ken Burns） */
       animation: deepBreathZoom 20s ease-in-out infinite alternate;
     }
 
-    /* 👇 カード本体のスマホ用設定 */
+    /* カードの開始位置 */
     .content-card {
       position: relative; z-index: 20; 
-      /* スマホの画面幅に合わせて、背景画像の下から出す（要調整） */
-      margin-top: 85vw; 
+      margin-top: 90vw; /* 背景(110vw)に少し被さるように重なる！ */
       background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
       box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.08);
       opacity: 0; transform: translateY(40px);
@@ -39,22 +40,18 @@
 
     /* 💻 PCなどの横長画面用の設定 */
     @media (min-width: 768px) {
-      .hero-bg { 
-        background-size: cover; /* PCでは画面いっぱいに */
-        background-position: center; 
-      }
+      .hero-bg-wrap { height: 100vh; }
+      .hero-bg { background-size: cover; background-position: center; }
       .content-card { margin-top: 55vh !important; }
     }
 
     @keyframes deepBreathZoom { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
     @keyframes elegantEntrance { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* 文字が順番にフワッと出るシネマティック表示 */
     .reveal-text { opacity: 0; transform: translateY(15px); animation: textFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
     .delay-1 { animation-delay: 0.6s; } .delay-2 { animation-delay: 1.0s; } .delay-3 { animation-delay: 1.4s; } .delay-4 { animation-delay: 1.8s; }
     @keyframes textFadeIn { to { opacity: 1; transform: translateY(0); } }
 
-    /* ゴールドラインのキラッと光る反射 */
     .gold-shine { position: relative; overflow: hidden; background-color: #fcd34d; }
     .gold-shine::after {
       content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
@@ -62,7 +59,6 @@
     }
     @keyframes shine { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
 
-    /* 背景に舞う光の粒子 */
     @keyframes floatUpParticle { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 20% { opacity: 0.6; } 80% { opacity: 0.6; } 100% { transform: translateY(-10vh) scale(1.2); opacity: 0; } }
     .particle { position: absolute; bottom: -10%; background-color: rgba(255, 255, 255, 0.85); border-radius: 50%; animation: floatUpParticle linear infinite; box-shadow: 0 0 12px rgba(255, 255, 255, 0.6); pointer-events: none; }
   </style>
@@ -74,10 +70,10 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // 🚨 プロデューサーの新しいGASのURLに書き換えてな！
+    // 🚨 最新のGAS URLに変更済みやに！
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbwbM4IrB7zMjySQKgGfM7RMq4wceK42ds01faXB8q92hS0VGTlqdOX_ZPthGDmKO5Y/exec';
 
-    // ✨ 10種類の最強デザインテーマ（高画質版）
+    // ✨ 10種類の最強デザインテーマ
     const THEMES = {
       original: { name: '🐶 オリジナル水彩（サンプル）', url: './wedding-bg.png' },
       classic: { name: '💍 クラシック・ホワイト', url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1000&q=80' },
@@ -120,7 +116,7 @@
       if (view === 'manage') return <ManageView card={data} attendees={attendees} />;
     };
 
-    // 🖋️ 画面1：誰でも作れる作成フォーム ＋ ココナラバナー
+    // 🖋️ 画面1：誰でも作れる作成フォーム
     const CreateView = () => {
       const [formData, setFormData] = useState({ to: '大切なお友達の皆様へ', message: 'いつも温かい応援をありがとうございます。\nこの度、私たちは結婚式を挙げることになりました。\nぜひ皆様に日頃の感謝をお伝えしたく、ご予定を空けておいていただけると嬉しいです！', from: 'Yuki & Haruka', eventDate: '2026年 11月 22日 (日)', location: 'アニヴェルセル みなとみらい横浜\n14:00 受付開始 / 15:00 開宴', theme: 'classic' });
       const [status, setStatus] = useState('idle'); 
@@ -222,7 +218,7 @@
       );
     };
 
-    // 🌟 プロデューサーのココナラURL入りアップセルバナー
+    // 🌟 アップセルバナー
     const UpsellBanner = () => (
       <div className="bg-gradient-to-r from-pink-50 to-amber-50 p-6 md:p-8 rounded-3xl border border-pink-100/50 shadow-sm text-center relative overflow-hidden group">
         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500"><i className="fa-solid fa-gem text-6xl text-pink-500"></i></div>
@@ -238,17 +234,15 @@
       </div>
     );
 
-    // 💌 画面2：ゲストが見る招待状（選んだテーマの画像が出る！）
+    // 💌 画面2：ゲストが見る招待状
     const CardView = ({ card }) => {
       const [showForm, setShowForm] = useState(false);
       const [attendData, setAttendData] = useState({ name: '', status: '出席', message: '' });
       const [submitState, setSubmitState] = useState('idle');
       
-      // 選ばれたテーマのURLを取得（なければclassic）
       const bgUrl = THEMES[card.theme] ? THEMES[card.theme].url : THEMES.classic.url;
 
       useEffect(() => {
-        // キラキラエフェクト
         const container = document.getElementById('particles-container');
         if(container && container.children.length === 0) {
           for (let i = 0; i < 20; i++) {
@@ -273,6 +267,7 @@
 
       return (
         <div className="relative">
+          {/* 背景コンテナ */}
           <div className="hero-bg-wrap"><div className="hero-bg" style={{ backgroundImage: `url(${bgUrl})` }}></div></div>
           <div id="particles-container" className="absolute inset-0 overflow-hidden z-10 pointer-events-none"></div>
 
@@ -330,7 +325,7 @@
       );
     };
 
-    // 📊 画面3：管理ダッシュボード ＋ ココナラバナー
+    // 📊 画面3：管理ダッシュボード
     const ManageView = ({ card, attendees }) => {
       const attendingCount = attendees.filter(a => a.status === '出席').length;
       return (

@@ -3,150 +3,371 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>特別なメッセージカード</title>
+  <title>Premium WEB Invitation | 無料作成ツール</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
-    body { margin: 0; overflow-x: hidden; font-family: 'Helvetica Neue', Arial, sans-serif; }
+    body { margin: 0; font-family: 'Noto Serif JP', serif; background-color: #fdfbf9; overflow-x: hidden; }
     
-    /* アニメーション定義 */
-    @keyframes floatUp { 0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { transform: translateY(-10vh) scale(1.5) rotate(360deg); opacity: 0; } }
-    @keyframes fallDown { 0% { transform: translateY(-10vh) scale(0.5) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { transform: translateY(100vh) scale(1.2) rotate(360deg); opacity: 0; } }
-    @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-    @keyframes sway { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(20px); } }
-
-    /* ✨ 結婚式用のキラキラ＆舞い上がる羽エフェクト */
-    @keyframes sparkFeather {
-      0% { transform: translateY(100vh) translateX(0px) scale(0.5) rotate(0deg); opacity: 0; }
-      10% { opacity: 1; filter: drop-shadow(0 0 5px rgba(255,215,0,0.8)); }
-      50% { transform: translateY(50vh) translateX(30px) scale(1) rotate(180deg); opacity: 0.9; }
-      90% { opacity: 0.8; filter: drop-shadow(0 0 2px rgba(255,215,0,0.5)); }
-      100% { transform: translateY(-10vh) translateX(-20px) scale(1.3) rotate(360deg); opacity: 0; }
+    .hero-bg-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0; overflow: hidden; }
+    .hero-bg {
+      width: 100%; height: 100%;
+      background-image: url('./wedding-bg.png'); /* 🌟ローカルの背景画像 */
+      background-size: 100% auto; background-position: top center; background-repeat: no-repeat;
+      animation: deepBreathZoom 20s ease-in-out infinite alternate;
     }
+    @media (min-width: 768px) {
+      .hero-bg { background-size: cover; background-position: center; }
+      .content-card { margin-top: 55vh !important; }
+    }
+    @keyframes deepBreathZoom { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
 
-    .animate-float { animation: floatUp linear infinite; position: absolute; bottom: -10%; }
-    .animate-fall { animation: fallDown linear infinite; position: absolute; top: -10%; }
-    .animate-pop-in { animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-    
-    /* ✨ 新しい結婚式用アニメーション */
-    .animate-wedding { animation: sparkFeather linear infinite; position: absolute; bottom: -10%; }
+    .content-card {
+      position: relative; z-index: 20; margin-top: 85vw; 
+      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.08);
+      opacity: 0; transform: translateY(40px);
+      animation: elegantEntrance 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+    @keyframes elegantEntrance { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+    .reveal-text { opacity: 0; transform: translateY(15px); animation: textFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+    .delay-1 { animation-delay: 0.6s; } .delay-2 { animation-delay: 1.0s; } .delay-3 { animation-delay: 1.4s; } .delay-4 { animation-delay: 1.8s; }
+    @keyframes textFadeIn { to { opacity: 1; transform: translateY(0); } }
+
+    .gold-shine { position: relative; overflow: hidden; background-color: #fcd34d; }
+    .gold-shine::after {
+      content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent); transform: skewX(-20deg); animation: shine 4s infinite;
+    }
+    @keyframes shine { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
+
+    @keyframes floatUpParticle { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 20% { opacity: 0.6; } 80% { opacity: 0.6; } 100% { transform: translateY(-10vh) scale(1.2); opacity: 0; } }
+    .particle { position: absolute; bottom: -10%; background-color: rgba(255, 255, 255, 0.85); border-radius: 50%; animation: floatUpParticle linear infinite; box-shadow: 0 0 12px rgba(255, 255, 255, 0.6); pointer-events: none; }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="text-gray-800 antialiased relative">
 
   <div id="root"></div>
 
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // 🚨 GAS URLはそのままやに！
+    // 🚨 新しいGASのURLに書き換えてな！
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbza1jomxSF6eFKhokzYXH3pw7sC15qre4235Gp43J6RbxnnHp6VRSpfqh4iUQ4vahVS/exec';
 
     const App = () => {
       const [view, setView] = useState('loading'); 
-      const [cardData, setCardData] = useState(null);
+      const [data, setData] = useState(null);
+      const [attendees, setAttendees] = useState([]);
 
       useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const id = params.get('id');
+        const manage = params.get('manage');
 
         if (id) {
-          fetch(`${GAS_URL}?id=${id}`)
+          fetch(`${GAS_URL}?action=get_card&id=${id}`)
             .then(res => res.json())
-            .then(data => {
-              if (data.success) {
-                setCardData(data.data);
-                setView('card');
-              } else {
-                setView('notfound');
-              }
-            })
-            .catch(() => setView('notfound'));
+            .then(res => {
+              if (res.success) { setData(res.data); setView('card'); } 
+              else { setView('create'); }
+            });
+        } else if (manage) {
+          fetch(`${GAS_URL}?action=get_manage&manage=${manage}`)
+            .then(res => res.json())
+            .then(res => {
+              if (res.success) { setData(res.card); setAttendees(res.attendees); setView('manage'); } 
+              else { setView('create'); }
+            });
         } else {
-          // IDがない場合は防御！
-          setView('notfound');
+          setView('create');
         }
       }, []);
 
-      if (view === 'loading') {
-        return (
-          <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <div className="text-center text-gray-400">
-              <i className="fa-solid fa-envelope-open-text fa-bounce text-4xl mb-4"></i>
-              <p className="font-bold">特別な招待状を開いています…</p>
-            </div>
-          </div>
-        );
-      }
+      if (view === 'loading') return <div className="min-h-screen flex items-center justify-center"><i className="fa-solid fa-spinner fa-spin text-3xl text-amber-500"></i></div>;
+      if (view === 'create') return <CreateView />;
+      if (view === 'card') return <CardView card={data} />;
+      if (view === 'manage') return <ManageView card={data} attendees={attendees} />;
+    };
 
-      if (view === 'notfound') {
-        return (
-          <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-            <div className="text-center bg-white p-8 rounded-3xl shadow-sm border border-gray-100 max-w-sm">
-              <i className="fa-solid fa-gift text-4xl text-gray-300 mb-4"></i>
-              <h2 className="text-lg font-bold text-gray-700 mb-2">特別なWEB招待状です</h2>
-              <p className="text-sm text-gray-500">正しいURLからアクセスして、<br/>新郎新婦からのメッセージをお受け取りください。</p>
-            </div>
-          </div>
-        );
-      }
+    // 🖋️ 【画面1】誰でも作れる作成フォーム ＋ 🌟アップセル広告
+    const CreateView = () => {
+      const [formData, setFormData] = useState({ to: '大切なお友達の皆様へ', message: 'いつも温かい応援をありがとうございます。\nこの度、私たちは結婚式を挙げることになりました。\nぜひ皆様に日頃の感謝をお伝えしたく、ご予定を空けておいていただけると嬉しいです！', from: 'Yuki & Haruka', eventDate: '2026年 11月 22日 (日)', location: 'アニヴェルセル みなとみらい横浜\n14:00 受付開始 / 15:00 開宴' });
+      const [status, setStatus] = useState('idle'); 
+      const [links, setLinks] = useState(null);
 
-      // 🎁 テーマ設定（ここをパキっと華やかにしたに！）
-      const themeConfig = {
-        // ✨ 新：Wedding（パキっと華やか版）
-        // 背景を鮮やかなピンク〜オレンジのグラデーションに、羽エフェクト、ゴールドの煌めき
-        wedding: { 
-          bg: 'bg-gradient-to-br from-pink-400 via-orange-300 to-amber-200', 
-          icon: 'fa-feather-pointed text-amber-100', // fa-feather-pointedを煌めく羽に
-          animation: 'animate-wedding', 
-          cardStyle: 'border-4 border-white shadow-2xl shadow-orange-200/50' 
-        },
-        birthday: { bg: 'bg-gradient-to-br from-yellow-100 via-pink-100 to-cyan-100', icon: 'fa-certificate text-pink-300', animation: 'animate-fall', cardStyle: 'border-2 border-white shadow-xl' },
-        elegant: { bg: 'bg-slate-900', icon: 'fa-snowflake text-slate-400', animation: 'animate-fall', cardStyle: 'bg-slate-800/80 border border-slate-700 text-slate-200', textColor: 'text-slate-200', subTextColor: 'text-slate-400' },
-        hearts: { bg: 'bg-pink-100', icon: 'fa-heart text-pink-400', animation: 'animate-float', cardStyle: '' },
-        stars: { bg: 'bg-indigo-900', icon: 'fa-star text-yellow-300', animation: 'animate-fall', cardStyle: 'text-gray-800' }
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        setStatus('loading');
+        const params = new URLSearchParams({ action: 'create', ...formData });
+        
+        fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString() })
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            const base = window.location.href.split('?')[0];
+            setLinks({ public: `${base}?id=${res.id}`, manage: `${base}?manage=${res.id}` });
+            setStatus('success');
+          } else { alert('エラーが発生しました'); setStatus('idle'); }
+        });
       };
 
-      const currentTheme = themeConfig[cardData.theme] || themeConfig.wedding;
-      const particles = Array.from({ length: 30 }); // エフェクトを少し増やしたに！
+      if (status === 'success') {
+        return (
+          <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-amber-50/30">
+            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-xl max-w-xl w-full text-center border-t-4 border-amber-400 mb-8">
+              <i className="fa-solid fa-circle-check text-5xl text-amber-500 mb-6"></i>
+              <h2 className="text-2xl font-bold mb-6 text-gray-800">招待状が完成しました！</h2>
+              
+              <div className="bg-gray-50 p-6 rounded-xl mb-6 text-left border border-gray-200">
+                <p className="text-sm font-bold text-gray-500 mb-2"><i className="fa-solid fa-paper-plane mr-2"></i>ゲストへ送るURL（招待状）</p>
+                <input type="text" readOnly value={links.public} className="w-full p-3 bg-white border rounded-lg text-sm mb-2 text-gray-700 font-medium" />
+                <a href={links.public} target="_blank" className="text-amber-600 text-sm font-bold hover:underline">実際のカードを開く &rarr;</a>
+              </div>
+
+              <div className="bg-red-50 p-6 rounded-xl text-left border border-red-100">
+                <p className="text-sm font-bold text-red-600 mb-2"><i className="fa-solid fa-lock mr-2"></i>管理URL（絶対になくさないでください）</p>
+                <input type="text" readOnly value={links.manage} className="w-full p-3 bg-white border rounded-lg text-sm mb-2 text-gray-700 font-medium" />
+                <a href={links.manage} target="_blank" className="text-red-600 text-sm font-bold hover:underline">管理ダッシュボードを開く &rarr;</a>
+              </div>
+            </div>
+
+            {/* 🌟 完了画面のアップセル広告 */}
+            <UpsellBanner />
+          </div>
+        );
+      }
 
       return (
-        <div className={`min-h-screen relative overflow-hidden flex items-center justify-center p-4 transition-colors duration-1000 ${currentTheme.bg}`}>
-          {/* 背景エフェクト */}
-          {particles.map((_, i) => {
-            const size = Math.random() * 1.5 + 0.8; // 少し大きく
-            const left = Math.random() * 100; 
-            const delay = Math.random() * 8; // バラつきを持たせる
-            const duration = Math.random() * 6 + 7; // 少しゆっくり舞う
-            return (
-              <i key={i} className={`fa-solid ${currentTheme.icon} ${currentTheme.animation}`} style={{ fontSize: `${size}rem`, left: `${left}%`, animationDelay: `${delay}s`, animationDuration: `${duration}s`, opacity: Math.random() * 0.7 + 0.3 }}></i>
-            );
-          })}
+        <div className="min-h-screen py-12 px-4 bg-amber-50/30">
+          <div className="max-w-2xl mx-auto">
+            {/* 🌟 作成画面トップのアップセル広告 */}
+            <UpsellBanner />
 
-          {/* カード本体 */}
-          <div className={`relative z-10 bg-white/95 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-2xl max-w-lg w-full animate-pop-in ${currentTheme.cardStyle}`}>
-            <h2 className={`text-2xl md:text-3xl font-extrabold mb-6 border-b-2 border-gray-100/20 pb-4 ${currentTheme.textColor || 'text-gray-800'}`}>
-              {cardData.to} へ
-            </h2>
-            <p className={`text-lg md:text-xl leading-relaxed whitespace-pre-wrap font-semibold min-h-[100px] ${currentTheme.textColor ? 'text-slate-300' : 'text-gray-600'}`}>
-              {cardData.message}
-            </p>
-            {cardData.from && (
-              <p className={`text-right mt-8 text-lg font-bold ${currentTheme.subTextColor || 'text-gray-500'}`}>
-                From: {cardData.from}
-              </p>
-            )}
+            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-amber-100 mt-8">
+              <div className="text-center mb-10">
+                <p className="text-amber-500 font-bold tracking-widest text-sm mb-2" style={{fontFamily: "'Cormorant Garamond', serif"}}>CREATE INVITATION</p>
+                <h1 className="text-3xl font-bold text-gray-800">無料WEB招待状を作る</h1>
+                <p className="text-gray-500 text-sm mt-4">必要事項を入力するだけで、美しく動く出欠フォーム付き招待状がすぐに完成します。</p>
+              </div>
 
-            {/* ココナラ営業用ボタン */}
-            <div className="mt-12 text-center pt-6 border-t border-gray-200/20">
-              <a href="https://coconala.com/" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-gray-400 hover:text-gray-600 transition-colors inline-block px-4 py-2 hover:bg-white/50 rounded-full">
-                <i className="fa-solid fa-envelope-open-text mr-1.5"></i>オリジナルWEB招待状・カードの制作依頼はこちら
-              </a>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">新郎新婦のお名前 (From)</label>
+                    <input type="text" value={formData.from} onChange={e => setFormData({...formData, from: e.target.value})} required className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-300 outline-none" placeholder="Yuki & Haruka" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">ゲストへの宛名 (To)</label>
+                    <input type="text" value={formData.to} onChange={e => setFormData({...formData, to: e.target.value})} required className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-300 outline-none" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">ご挨拶メッセージ</label>
+                  <textarea value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} required rows="5" className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-300 outline-none"></textarea>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">日時</label>
+                  <input type="text" value={formData.eventDate} onChange={e => setFormData({...formData, eventDate: e.target.value})} required className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-300 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">会場・アクセス等</label>
+                  <textarea value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} required rows="2" className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-300 outline-none"></textarea>
+                </div>
+                
+                <button type="submit" disabled={status === 'loading'} className="w-full bg-gray-800 text-white font-bold tracking-widest py-4 rounded-xl hover:bg-amber-600 transition-colors shadow-lg mt-8 disabled:opacity-50">
+                  {status === 'loading' ? '作成中...' : '無料で招待状を発行する'}
+                </button>
+              </form>
             </div>
+          </div>
+        </div>
+      );
+    };
+
+    // 🌟 アップセル専用コンポーネント（ココナラへの誘導）
+    const UpsellBanner = () => (
+      <div className="bg-gradient-to-r from-pink-50 to-amber-50 p-6 md:p-8 rounded-3xl border border-pink-100/50 shadow-sm text-center relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-4 opacity-10"><i className="fa-solid fa-gem text-6xl text-pink-500"></i></div>
+        <p className="text-pink-500 font-extrabold text-sm tracking-widest mb-2">＼ もっとこだわりたいお二人へ ／</p>
+        <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">完全オリジナルのWEB招待状、作りませんか？</h3>
+        <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-6">
+          「愛犬のイラストを入れたい」「二人の思い出の場所を背景にしたい」<br className="hidden md:block"/>
+          そんな願いを叶える、世界に一つだけのデジタルアート背景でプロが招待状をお作りします。
+        </p>
+        {/* 🚨 ここをプロデューサーのココナラ出品URLに変えるんやに！ */}
+        <a href="https://coconala.com/" target="_blank" className="inline-block bg-pink-500 text-white font-bold tracking-widest py-3.5 px-8 rounded-full hover:bg-pink-600 transition-transform hover:-translate-y-1 shadow-lg">
+          フルオーダーを相談する（ココナラ）<i className="fa-solid fa-arrow-up-right-from-square ml-2 text-sm"></i>
+        </a>
+      </div>
+    );
+
+    // 💌 【画面2】ゲストが見る招待状（広告なし！純度100%のエレガンス）
+    const CardView = ({ card }) => {
+      const [showForm, setShowForm] = useState(false);
+      const [attendData, setAttendData] = useState({ name: '', status: '出席', message: '' });
+      const [submitState, setSubmitState] = useState('idle');
+
+      useEffect(() => {
+        const container = document.getElementById('particles-container');
+        if(container && container.children.length === 0) {
+          for (let i = 0; i < 20; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.width = `${Math.random() * 6 + 4}px`;
+            p.style.height = p.style.width;
+            p.style.left = `${Math.random() * 100}%`;
+            p.style.animationDelay = `${Math.random() * 5}s`;
+            p.style.animationDuration = `${Math.random() * 8 + 8}s`;
+            container.appendChild(p);
+          }
+        }
+      }, []);
+
+      const handleAttendSubmit = (e) => {
+        e.preventDefault();
+        setSubmitState('loading');
+        const params = new URLSearchParams({ action: 'attend', id: card.id, ...attendData });
+        fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString() })
+        .then(() => setSubmitState('success'))
+        .catch(() => alert('エラーが発生しました'));
+      };
+
+      return (
+        <div className="relative">
+          <div className="hero-bg-wrap"><div className="hero-bg"></div></div>
+          <div id="particles-container" className="absolute inset-0 overflow-hidden z-10 pointer-events-none"></div>
+
+          <main className="content-card w-full max-w-lg mx-auto rounded-t-[40px] px-6 py-12 md:p-14 text-center border-t border-white/50 min-h-screen">
+            <div className="w-16 h-1 gold-shine mx-auto rounded-full mb-10"></div>
+
+            <div className="mb-10 reveal-text delay-1">
+              <p className="text-amber-600 tracking-[0.3em] text-xs md:text-sm font-bold uppercase mb-3" style={{fontFamily: "'Cormorant Garamond', serif"}}>Save the Date</p>
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-800 tracking-widest mb-2">{card.from}</h1>
+              <p className="text-gray-400 text-sm italic" style={{fontFamily: "'Cormorant Garamond', serif"}}>We are getting married</p>
+            </div>
+
+            <h2 className="text-xl md:text-2xl font-bold mb-8 text-gray-800 tracking-widest reveal-text delay-2">{card.to}</h2>
+            
+            <p className="text-md md:text-lg leading-[2.2] text-gray-700 font-medium mb-12 text-left md:text-center px-2 reveal-text delay-3 whitespace-pre-wrap">{card.message}</p>
+
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50/30 rounded-2xl p-8 mb-10 border border-amber-100/50 shadow-sm reveal-text delay-4">
+              <p className="font-bold text-gray-800 mb-3 text-lg tracking-widest">{card.eventDate}</p>
+              <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">{card.location}</p>
+            </div>
+
+            <div className="reveal-text delay-4">
+              <button onClick={() => setShowForm(true)} className="inline-block w-full md:w-auto bg-gray-800 text-white font-bold tracking-widest py-4 px-12 rounded-full hover:bg-amber-600 transition-colors duration-300 shadow-xl mb-4 hover:-translate-y-1 transform">
+                出欠を回答する <i className="fa-solid fa-envelope-open-text ml-2"></i>
+              </button>
+            </div>
+          </main>
+
+          {/* 出欠入力モーダル */}
+          {showForm && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
+              <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
+                <button onClick={() => setShowForm(false)} className="absolute top-6 right-6 text-gray-400 hover:text-gray-800"><i className="fa-solid fa-xmark text-2xl"></i></button>
+                
+                {submitState === 'success' ? (
+                  <div className="text-center py-10">
+                    <i className="fa-solid fa-heart text-5xl text-pink-400 mb-4 animate-bounce"></i>
+                    <h3 className="text-2xl font-bold text-gray-800 mb-2">送信完了しました</h3>
+                    <p className="text-gray-500">ご回答ありがとうございます！</p>
+                  </div>
+                ) : (
+                  <>
+                    <h3 className="text-2xl font-bold text-gray-800 mb-6 tracking-widest text-center border-b pb-4">出欠フォーム</h3>
+                    <form onSubmit={handleAttendSubmit} className="space-y-5">
+                      <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">お名前（フルネーム）</label>
+                        <input type="text" required value={attendData.name} onChange={e=>setAttendData({...attendData, name: e.target.value})} className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-300 outline-none" placeholder="山田 太郎" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">ご出欠</label>
+                        <div className="flex gap-4">
+                          <label className={`flex-1 text-center py-3 border rounded-xl cursor-pointer font-bold transition-colors ${attendData.status === '出席' ? 'bg-amber-500 text-white border-amber-500' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'}`}>
+                            <input type="radio" name="status" value="出席" className="hidden" onChange={e=>setAttendData({...attendData, status: e.target.value})} /> ご出席
+                          </label>
+                          <label className={`flex-1 text-center py-3 border rounded-xl cursor-pointer font-bold transition-colors ${attendData.status === '欠席' ? 'bg-gray-800 text-white border-gray-800' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'}`}>
+                            <input type="radio" name="status" value="欠席" className="hidden" onChange={e=>setAttendData({...attendData, status: e.target.value})} /> ご欠席
+                          </label>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">お祝いのメッセージ</label>
+                        <textarea required value={attendData.message} onChange={e=>setAttendData({...attendData, message: e.target.value})} rows="3" className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-300 outline-none" placeholder="ご結婚おめでとうございます！"></textarea>
+                      </div>
+                      <button type="submit" disabled={submitState === 'loading'} className="w-full bg-gray-800 text-white font-bold tracking-widest py-4 rounded-xl hover:bg-amber-600 transition-colors shadow-lg mt-4 disabled:opacity-50">
+                        {submitState === 'loading' ? '送信中...' : '送信する'}
+                      </button>
+                    </form>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    // 📊 【画面3】主催者用の出欠管理ダッシュボード ＋ 🌟アップセル広告
+    const ManageView = ({ card, attendees }) => {
+      const attendingCount = attendees.filter(a => a.status === '出席').length;
+      
+      return (
+        <div className="min-h-screen bg-gray-50 py-10 px-4">
+          <div className="max-w-4xl mx-auto">
+            
+            {/* 🌟 ダッシュボードの上にもアップセル広告！ */}
+            <div className="mb-8">
+              <UpsellBanner />
+            </div>
+
+            <h1 className="text-2xl font-bold text-gray-800 mb-8"><i className="fa-solid fa-chart-pie text-amber-500 mr-2"></i>出欠管理ダッシュボード</h1>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p className="text-gray-500 text-sm font-bold mb-1">総回答数</p>
+                <p className="text-4xl font-extrabold text-gray-800">{attendees.length}<span className="text-lg text-gray-400 font-medium ml-1">名</span></p>
+              </div>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-amber-400">
+                <p className="text-amber-600 text-sm font-bold mb-1">ご出席</p>
+                <p className="text-4xl font-extrabold text-gray-800">{attendingCount}<span className="text-lg text-gray-400 font-medium ml-1">名</span></p>
+              </div>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p className="text-gray-500 text-sm font-bold mb-1">ご欠席</p>
+                <p className="text-2xl font-bold text-gray-600 mt-2">{attendees.length - attendingCount} 名</p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="bg-gray-800 px-6 py-4">
+                <h2 className="text-white font-bold tracking-widest">回答一覧</h2>
+              </div>
+              <div className="divide-y divide-gray-100">
+                {attendees.length === 0 ? (
+                  <p className="p-8 text-center text-gray-400 font-bold">まだ回答はありません。</p>
+                ) : (
+                  attendees.map((a, i) => (
+                    <div key={i} className="p-6 hover:bg-gray-50 transition-colors">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-lg font-bold text-gray-800">{a.name} 様</h3>
+                        <span className={`px-4 py-1 rounded-full text-xs font-bold ${a.status === '出席' ? 'bg-amber-100 text-amber-700' : 'bg-gray-200 text-gray-600'}`}>{a.status}</span>
+                      </div>
+                      <p className="text-gray-600 text-sm bg-gray-50 p-4 rounded-xl border border-gray-100 whitespace-pre-wrap">{a.message}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
           </div>
         </div>
       );

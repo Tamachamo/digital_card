@@ -15,47 +15,69 @@
     body { margin: 0; font-family: 'Noto Serif JP', serif; background-color: #fdfbf9; overflow-x: hidden; }
     
     .hero-bg-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0; overflow: hidden; background-color: #e5e7eb; }
+    
+    /* 👇 【修正ポイント】全背景共通！スマホで切れない最強設定に戻したに！ */
     .hero-bg {
       width: 100%; height: 100%;
-      background-size: cover; background-position: center; background-repeat: no-repeat;
+      background-size: 100% auto; /* 🚨スマホの横幅に完璧に合わせる！ */
+      background-position: top center;
+      background-repeat: no-repeat;
+      /* ✨ 深い呼吸エフェクト（Ken Burns） */
       animation: deepBreathZoom 20s ease-in-out infinite alternate;
     }
-    @keyframes deepBreathZoom { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
 
+    /* 👇 カード本体のスマホ用設定 */
     .content-card {
-      position: relative; z-index: 20; margin-top: 85vw; 
+      position: relative; z-index: 20; 
+      /* スマホの画面幅に合わせて、背景画像の下から出す（要調整） */
+      margin-top: 85vw; 
       background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
       box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.08);
       opacity: 0; transform: translateY(40px);
       animation: elegantEntrance 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     }
+
+    /* 💻 PCなどの横長画面用の設定 */
     @media (min-width: 768px) {
+      .hero-bg { 
+        background-size: cover; /* PCでは画面いっぱいに */
+        background-position: center; 
+      }
       .content-card { margin-top: 55vh !important; }
     }
+
+    @keyframes deepBreathZoom { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
     @keyframes elegantEntrance { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
+    /* 文字が順番にフワッと出るシネマティック表示 */
     .reveal-text { opacity: 0; transform: translateY(15px); animation: textFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
     .delay-1 { animation-delay: 0.6s; } .delay-2 { animation-delay: 1.0s; } .delay-3 { animation-delay: 1.4s; } .delay-4 { animation-delay: 1.8s; }
     @keyframes textFadeIn { to { opacity: 1; transform: translateY(0); } }
 
+    /* ゴールドラインのキラッと光る反射 */
     .gold-shine { position: relative; overflow: hidden; background-color: #fcd34d; }
-    .gold-shine::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent); transform: skewX(-20deg); animation: shine 4s infinite; }
+    .gold-shine::after {
+      content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent); transform: skewX(-20deg); animation: shine 4s infinite;
+    }
     @keyframes shine { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
 
+    /* 背景に舞う光の粒子 */
     @keyframes floatUpParticle { 0% { transform: translateY(100vh) scale(0.5); opacity: 0; } 20% { opacity: 0.6; } 80% { opacity: 0.6; } 100% { transform: translateY(-10vh) scale(1.2); opacity: 0; } }
     .particle { position: absolute; bottom: -10%; background-color: rgba(255, 255, 255, 0.85); border-radius: 50%; animation: floatUpParticle linear infinite; box-shadow: 0 0 12px rgba(255, 255, 255, 0.6); pointer-events: none; }
   </style>
 </head>
 <body class="text-gray-800 antialiased relative">
+
   <div id="root"></div>
 
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // 🚨 新しいGASのURLに書き換えてな！
+    // 🚨 プロデューサーの新しいGASのURLに書き換えてな！
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbwbM4IrB7zMjySQKgGfM7RMq4wceK42ds01faXB8q92hS0VGTlqdOX_ZPthGDmKO5Y/exec';
 
-    // ✨ 10種類の最強デザインテーマ！
+    // ✨ 10種類の最強デザインテーマ（高画質版）
     const THEMES = {
       original: { name: '🐶 オリジナル水彩（サンプル）', url: './wedding-bg.png' },
       classic: { name: '💍 クラシック・ホワイト', url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1000&q=80' },
@@ -122,15 +144,16 @@
       if (status === 'success') {
         return (
           <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-amber-50/30">
-            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-xl max-w-xl w-full text-center border-t-4 border-amber-400 mb-8">
+            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-xl max-w-xl w-full text-center border-t-4 border-amber-400 mb-8 overflow-hidden relative">
+              <div className="absolute top-0 right-0 p-3 opacity-10"><i className="fa-solid fa-gift text-6xl text-amber-300"></i></div>
               <i className="fa-solid fa-circle-check text-5xl text-amber-500 mb-6"></i>
-              <h2 className="text-2xl font-bold mb-6 text-gray-800">招待状が完成しました！</h2>
-              <div className="bg-gray-50 p-6 rounded-xl mb-6 text-left border border-gray-200">
+              <h2 className="text-2xl font-bold mb-6 text-gray-800 relative z-10">招待状が完成しました！</h2>
+              <div className="bg-gray-50 p-6 rounded-xl mb-6 text-left border border-gray-200 relative z-10">
                 <p className="text-sm font-bold text-gray-500 mb-2"><i className="fa-solid fa-paper-plane mr-2"></i>ゲストへ送るURL（招待状）</p>
                 <input type="text" readOnly value={links.public} className="w-full p-3 bg-white border rounded-lg text-sm mb-2 text-gray-700 font-medium" />
                 <a href={links.public} target="_blank" className="text-amber-600 text-sm font-bold hover:underline">実際のカードを開く &rarr;</a>
               </div>
-              <div className="bg-red-50 p-6 rounded-xl text-left border border-red-100">
+              <div className="bg-red-50 p-6 rounded-xl text-left border border-red-100 relative z-10">
                 <p className="text-sm font-bold text-red-600 mb-2"><i className="fa-solid fa-lock mr-2"></i>管理URL（絶対になくさないでください）</p>
                 <input type="text" readOnly value={links.manage} className="w-full p-3 bg-white border rounded-lg text-sm mb-2 text-gray-700 font-medium" />
                 <a href={links.manage} target="_blank" className="text-red-600 text-sm font-bold hover:underline">管理ダッシュボードを開く &rarr;</a>
@@ -153,24 +176,27 @@
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 
-                {/* 🌟 テーマ選択 */}
-                <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-100 mb-6">
-                  <label className="block text-sm font-bold text-gray-700 mb-2">背景デザインテーマ</label>
-                  <select value={formData.theme} onChange={e => setFormData({...formData, theme: e.target.value})} className="w-full p-3 border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-300 outline-none bg-white font-bold text-gray-700">
-                    {Object.entries(THEMES).map(([key, val]) => (
-                      <option key={key} value={key}>{val.name}</option>
-                    ))}
-                  </select>
+                {/* 🌟 デザインテーマ選択 */}
+                <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-100 mb-6 relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-cover bg-center opacity-10 group-hover:scale-105 transition-transform duration-700 pointer-events-none" style={{ backgroundImage: `url(${THEMES[formData.theme].url})` }}></div>
+                  <div className="relative z-10">
+                    <label className="block text-sm font-bold text-gray-700 mb-2">背景デザインテーマ</label>
+                    <select value={formData.theme} onChange={e => setFormData({...formData, theme: e.target.value})} className="w-full p-3 border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-300 outline-none bg-white font-bold text-gray-700">
+                      {Object.entries(THEMES).map(([key, val]) => (
+                        <option key={key} value={key}>{val.name}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-2">新郎新婦のお名前 (From)</label>
-                    <input type="text" value={formData.from} onChange={e => setFormData({...formData, from: e.target.value})} required className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-300 outline-none" />
+                    <input type="text" value={formData.from} onChange={e => setFormData({...formData, from: e.target.value})} required className="w-full p-3 border border-gray-300 rounded-xl outline-none" placeholder="Yuki & Haruka" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-2">ゲストへの宛名 (To)</label>
-                    <input type="text" value={formData.to} onChange={e => setFormData({...formData, to: e.target.value})} required className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-300 outline-none" />
+                    <input type="text" value={formData.to} onChange={e => setFormData({...formData, to: e.target.value})} required className="w-full p-3 border border-gray-300 rounded-xl outline-none" />
                   </div>
                 </div>
                 <div>
@@ -186,7 +212,7 @@
                   <textarea value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} required rows="2" className="w-full p-3 border border-gray-300 rounded-xl outline-none"></textarea>
                 </div>
                 
-                <button type="submit" disabled={status === 'loading'} className="w-full bg-gray-800 text-white font-bold tracking-widest py-4 rounded-xl hover:bg-amber-600 transition-colors shadow-lg mt-8">
+                <button type="submit" disabled={status === 'loading'} className="w-full bg-gray-800 text-white font-bold tracking-widest py-4 rounded-xl hover:bg-amber-600 transition-colors shadow-lg mt-8 disabled:opacity-50">
                   {status === 'loading' ? '作成中...' : '無料で招待状を発行する'}
                 </button>
               </form>
@@ -202,12 +228,11 @@
         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500"><i className="fa-solid fa-gem text-6xl text-pink-500"></i></div>
         <p className="text-pink-500 font-extrabold text-sm tracking-widest mb-2">＼ もっとこだわりたいお二人へ ／</p>
         <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">世界に一つだけ！完全オリジナルのWEB招待状</h3>
-        <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-6">
+        <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-6 relative z-10">
           「愛犬や愛猫のイラストを入れたい」「二人の思い出の場所を背景にしたい」<br className="hidden md:block"/>
           そんな願いを叶える、プロによるフルオーダーメイドの招待状制作はこちら。
         </p>
-        {/* 👇 プロデューサーのココナラURL！ */}
-        <a href="https://coconala.com/users/4848139/" target="_blank" className="inline-block bg-pink-500 text-white font-bold tracking-widest py-3.5 px-8 rounded-full hover:bg-pink-600 transition-transform hover:-translate-y-1 shadow-lg">
+        <a href="https://coconala.com/users/4848139/" target="_blank" className="inline-block bg-pink-500 text-white font-bold tracking-widest py-3.5 px-8 rounded-full hover:bg-pink-600 transition-transform hover:-translate-y-1 shadow-lg relative z-10">
           フルオーダーを相談する（ココナラ）<i className="fa-solid fa-arrow-up-right-from-square ml-2 text-sm"></i>
         </a>
       </div>
@@ -223,6 +248,7 @@
       const bgUrl = THEMES[card.theme] ? THEMES[card.theme].url : THEMES.classic.url;
 
       useEffect(() => {
+        // キラキラエフェクト
         const container = document.getElementById('particles-container');
         if(container && container.children.length === 0) {
           for (let i = 0; i < 20; i++) {
@@ -255,36 +281,46 @@
             <div className="mb-10 reveal-text delay-1">
               <p className="text-amber-600 tracking-[0.3em] text-xs md:text-sm font-bold uppercase mb-3" style={{fontFamily: "'Cormorant Garamond', serif"}}>Save the Date</p>
               <h1 className="text-4xl md:text-5xl font-bold text-gray-800 tracking-widest mb-2">{card.from}</h1>
+              <p className="text-gray-400 text-sm italic" style={{fontFamily: "'Cormorant Garamond', serif"}}>We are getting married</p>
             </div>
             <h2 className="text-xl md:text-2xl font-bold mb-8 text-gray-800 tracking-widest reveal-text delay-2">{card.to}</h2>
             <p className="text-md md:text-lg leading-[2.2] text-gray-700 font-medium mb-12 text-left md:text-center px-2 reveal-text delay-3 whitespace-pre-wrap">{card.message}</p>
-            <div className="bg-gradient-to-br from-amber-50 to-orange-50/30 rounded-2xl p-8 mb-10 border border-amber-100/50 shadow-sm reveal-text delay-4">
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50/30 rounded-2xl p-8 mb-10 border border-amber-100/50 shadow-sm reveal-text delay-4 transition-all duration-500 hover:shadow-orange-100">
               <p className="font-bold text-gray-800 mb-3 text-lg tracking-widest">{card.eventDate}</p>
               <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">{card.location}</p>
             </div>
             <div className="reveal-text delay-4">
-              <button onClick={() => setShowForm(true)} className="inline-block w-full md:w-auto bg-gray-800 text-white font-bold tracking-widest py-4 px-12 rounded-full hover:bg-amber-600 transition-colors shadow-xl hover:-translate-y-1 transform">
+              <button onClick={() => setShowForm(true)} className="inline-block w-full md:w-auto bg-gray-800 text-white font-bold tracking-widest py-4 px-12 rounded-full hover:bg-amber-600 transition-colors duration-300 shadow-xl hover:-translate-y-1 transform">
                 出欠を回答する <i className="fa-solid fa-envelope-open-text ml-2"></i>
               </button>
             </div>
           </main>
 
           {showForm && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
               <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
                 <button onClick={() => setShowForm(false)} className="absolute top-6 right-6 text-gray-400 hover:text-gray-800"><i className="fa-solid fa-xmark text-2xl"></i></button>
                 {submitState === 'success' ? (
-                  <div className="text-center py-10"><i className="fa-solid fa-heart text-5xl text-pink-400 mb-4 animate-bounce"></i><h3 className="text-2xl font-bold mb-2">送信完了しました</h3></div>
+                  <div className="text-center py-10"><i className="fa-solid fa-heart text-5xl text-pink-400 mb-4 animate-bounce"></i><h3 className="text-2xl font-bold mb-2">送信完了しました</h3><p className="text-gray-500 text-sm">ご回答ありがとうございます！</p></div>
                 ) : (
                   <form onSubmit={handleAttendSubmit} className="space-y-5">
                     <h3 className="text-xl font-bold mb-4 border-b pb-4 text-center tracking-widest">出欠フォーム</h3>
-                    <input type="text" required value={attendData.name} onChange={e=>setAttendData({...attendData, name: e.target.value})} className="w-full p-3 border rounded-xl" placeholder="お名前" />
-                    <div className="flex gap-4">
-                      <label className={`flex-1 text-center py-3 border rounded-xl cursor-pointer font-bold ${attendData.status === '出席' ? 'bg-amber-500 text-white' : 'bg-gray-50 text-gray-500'}`}><input type="radio" name="status" value="出席" className="hidden" onChange={e=>setAttendData({...attendData, status: e.target.value})} /> ご出席</label>
-                      <label className={`flex-1 text-center py-3 border rounded-xl cursor-pointer font-bold ${attendData.status === '欠席' ? 'bg-gray-800 text-white' : 'bg-gray-50 text-gray-500'}`}><input type="radio" name="status" value="欠席" className="hidden" onChange={e=>setAttendData({...attendData, status: e.target.value})} /> ご欠席</label>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">お名前（フルネーム）</label>
+                      <input type="text" required value={attendData.name} onChange={e=>setAttendData({...attendData, name: e.target.value})} className="w-full p-3 border rounded-xl outline-none" placeholder="山田 太郎" />
                     </div>
-                    <textarea required value={attendData.message} onChange={e=>setAttendData({...attendData, message: e.target.value})} rows="3" className="w-full p-3 border rounded-xl" placeholder="メッセージ"></textarea>
-                    <button type="submit" className="w-full bg-gray-800 text-white font-bold py-4 rounded-xl mt-4">送信する</button>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">ご出欠</label>
+                      <div className="flex gap-4">
+                        <label className={`flex-1 text-center py-3 border rounded-xl cursor-pointer font-bold ${attendData.status === '出席' ? 'bg-amber-500 text-white border-amber-500' : 'bg-gray-50 text-gray-500'}`}><input type="radio" name="status" value="出席" className="hidden" onChange={e=>setAttendData({...attendData, status: e.target.value})} /> ご出席</label>
+                        <label className={`flex-1 text-center py-3 border rounded-xl cursor-pointer font-bold ${attendData.status === '欠席' ? 'bg-gray-800 text-white border-gray-800' : 'bg-gray-50 text-gray-500'}`}><input type="radio" name="status" value="欠席" className="hidden" onChange={e=>setAttendData({...attendData, status: e.target.value})} /> ご欠席</label>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">お祝いメッセージ</label>
+                      <textarea required value={attendData.message} onChange={e=>setAttendData({...attendData, message: e.target.value})} rows="3" className="w-full p-3 border rounded-xl outline-none" placeholder="メッセージ"></textarea>
+                    </div>
+                    <button type="submit" className="w-full bg-gray-800 text-white font-bold py-4 rounded-xl mt-4 disabled:opacity-50">送信する</button>
                   </form>
                 )}
               </div>
@@ -303,15 +339,15 @@
             <div className="mb-8"><UpsellBanner /></div>
             <h1 className="text-2xl font-bold text-gray-800 mb-8"><i className="fa-solid fa-chart-pie text-amber-500 mr-2"></i>出欠管理ダッシュボード</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"><p className="text-gray-500 text-sm font-bold mb-1">総回答数</p><p className="text-4xl font-extrabold">{attendees.length} 名</p></div>
-              <div className="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-amber-400"><p className="text-amber-600 text-sm font-bold mb-1">ご出席</p><p className="text-4xl font-extrabold">{attendingCount} 名</p></div>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"><p className="text-gray-500 text-sm font-bold mb-1">総回答数</p><p className="text-4xl font-extrabold text-gray-800">{attendees.length} 名</p></div>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-amber-400"><p className="text-amber-600 text-sm font-bold mb-1">ご出席</p><p className="text-4xl font-extrabold text-gray-800">{attendingCount} 名</p></div>
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"><p className="text-gray-500 text-sm font-bold mb-1">ご欠席</p><p className="text-2xl font-bold text-gray-600 mt-2">{attendees.length - attendingCount} 名</p></div>
             </div>
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="bg-gray-800 px-6 py-4"><h2 className="text-white font-bold tracking-widest">回答一覧</h2></div>
               <div className="divide-y divide-gray-100">
                 {attendees.map((a, i) => (
-                  <div key={i} className="p-6"><div className="flex justify-between mb-2"><h3 className="font-bold">{a.name} 様</h3><span className={`px-3 py-1 text-xs font-bold rounded-full ${a.status === '出席'?'bg-amber-100 text-amber-700':'bg-gray-200 text-gray-600'}`}>{a.status}</span></div><p className="text-sm bg-gray-50 p-3 rounded">{a.message}</p></div>
+                  <div key={i} className="p-6 hover:bg-gray-50"><div className="flex justify-between mb-2"><h3 className="font-bold text-gray-800">{a.name} 様</h3><span className={`px-3 py-1 text-xs font-bold rounded-full ${a.status === '出席'?'bg-amber-100 text-amber-700':'bg-gray-200 text-gray-600'}`}>{a.status}</span></div><p className="text-sm bg-gray-50 p-3 rounded text-gray-700 whitespace-pre-wrap">{a.message}</p></div>
                 ))}
               </div>
             </div>
